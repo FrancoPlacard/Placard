@@ -1,160 +1,98 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"/>
 <title>Mi Placard</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Zen+Kaku+Gothic+New:wght@300;400;500;700&display=swap" rel="stylesheet">
 <style>
-  :root{
-    --paper:#EDE8DF;
-    --surface:#F7F3EB;
-    --surface-2:#F0EBE1;
-    --ink:#2B2925;
-    --ink-soft:#5C564C;
-    --muted:#8A8276;
-    --line:#DAD2C4;
-    --accent:#3C4A57;      /* sumi indigo */
-    --accent-soft:#5A6A78;
-    --clay:#A8835F;        /* warm wood, sparing */
-    --ok:#7A8C6E;
-    --shadow:0 1px 2px rgba(43,41,37,.05), 0 8px 24px rgba(43,41,37,.06);
-  }
-  *{box-sizing:border-box;-webkit-tap-highlight-color:transparent;}
-  html,body{margin:0;padding:0;}
-  body{
-    font-family:"Zen Kaku Gothic New",system-ui,sans-serif;
-    background:var(--paper);
-    color:var(--ink);
-    font-weight:400;
-    line-height:1.5;
-    -webkit-font-smoothing:antialiased;
-    min-height:100vh;
-  }
-  .app{max-width:480px;margin:0 auto;padding:0 20px 110px;min-height:100vh;}
-
-  /* header */
-  header{padding:30px 0 8px;}
-  .eyebrow{
-    font-size:11px;letter-spacing:.22em;text-transform:uppercase;
-    color:var(--muted);font-weight:500;display:flex;align-items:center;gap:8px;
-  }
-  .eyebrow .dot{width:5px;height:5px;border-radius:50%;background:var(--clay);display:inline-block;}
-  h1{
-    font-weight:300;font-size:34px;letter-spacing:-.01em;margin:10px 0 2px;line-height:1.1;
-  }
-  h1 b{font-weight:700;}
-  .sub{color:var(--ink-soft);font-size:14px;font-weight:300;}
-
-  /* mode toggle */
-  .toggle{
-    display:flex;background:var(--surface-2);border:1px solid var(--line);
-    border-radius:999px;padding:4px;margin:22px 0 6px;gap:4px;
-  }
-  .toggle button{
-    flex:1;border:0;background:transparent;font-family:inherit;cursor:pointer;
-    padding:10px 8px;border-radius:999px;font-size:13.5px;font-weight:500;color:var(--ink-soft);
-    letter-spacing:.02em;transition:all .25s ease;
-  }
-  .toggle button.on{background:var(--ink);color:var(--paper);box-shadow:var(--shadow);}
-
-  .note{
-    font-size:12.5px;color:var(--muted);margin:10px 2px 0;display:flex;gap:7px;align-items:flex-start;
-  }
-
-  /* outfit cards */
-  .cards{margin-top:18px;display:flex;flex-direction:column;gap:14px;}
-  .card{
-    background:var(--surface);border:1px solid var(--line);border-radius:18px;
-    padding:18px 18px 16px;box-shadow:var(--shadow);
-    opacity:0;transform:translateY(10px);
-    animation:rise .5s cubic-bezier(.2,.7,.2,1) forwards;
-  }
-  @keyframes rise{to{opacity:1;transform:none;}}
-  .card-top{display:flex;justify-content:space-between;align-items:center;margin-bottom:14px;}
-  .opt{font-size:11px;letter-spacing:.2em;text-transform:uppercase;color:var(--muted);font-weight:500;}
-  .pill{
-    font-size:11px;font-weight:500;letter-spacing:.04em;color:var(--accent);
-    background:rgba(60,74,87,.08);border-radius:999px;padding:4px 11px;
-  }
-  .rows{display:flex;flex-direction:column;gap:11px;}
-  .row{display:flex;align-items:center;gap:13px;}
-  .sw{
-    width:34px;height:34px;border-radius:9px;flex:none;border:1px solid rgba(43,41,37,.12);
-    box-shadow:inset 0 0 0 1px rgba(255,255,255,.18);
-  }
-  .row .meta{min-width:0;}
-  .row .kind{font-size:10.5px;letter-spacing:.14em;text-transform:uppercase;color:var(--muted);font-weight:500;}
-  .row .name{font-size:15px;color:var(--ink);font-weight:500;line-height:1.25;}
-  .why{font-size:12.5px;color:var(--ink-soft);font-weight:300;margin:14px 0 0;font-style:normal;}
-  .use{
-    margin-top:14px;width:100%;border:1px solid var(--ink);background:transparent;color:var(--ink);
-    font-family:inherit;font-size:14px;font-weight:500;padding:12px;border-radius:11px;cursor:pointer;
-    transition:all .2s ease;letter-spacing:.01em;
-  }
-  .use:active{transform:scale(.985);}
-  .use.done{background:var(--ok);border-color:var(--ok);color:#fff;}
-
-  .reshuffle{
-    margin:18px auto 0;display:flex;align-items:center;gap:9px;justify-content:center;
-    background:transparent;border:0;color:var(--accent);font-family:inherit;font-size:14px;
-    font-weight:500;cursor:pointer;padding:8px 4px;width:100%;
-  }
-  .reshuffle svg{width:16px;height:16px;}
-
-  .empty{
-    text-align:center;color:var(--muted);font-size:14px;font-weight:300;
-    background:var(--surface);border:1px dashed var(--line);border-radius:16px;padding:34px 24px;margin-top:18px;
-  }
-  .empty b{display:block;color:var(--ink);font-weight:500;font-size:15px;margin-bottom:6px;}
-
-  /* placard */
-  .stat{display:flex;gap:10px;margin:20px 0 6px;}
-  .stat .box{flex:1;background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:13px 15px;}
-  .stat .n{font-size:24px;font-weight:300;}
-  .stat .l{font-size:11px;color:var(--muted);letter-spacing:.04em;}
-  .group{margin-top:22px;}
-  .group h2{
-    font-size:11px;letter-spacing:.2em;text-transform:uppercase;color:var(--muted);
-    font-weight:500;margin:0 0 10px;display:flex;justify-content:space-between;
-  }
-  .items{display:flex;flex-direction:column;gap:7px;}
-  .item{
-    display:flex;align-items:center;gap:12px;background:var(--surface);
-    border:1px solid var(--line);border-radius:12px;padding:9px 12px;cursor:pointer;
-    transition:opacity .2s ease;
-  }
-  .item .sw{width:26px;height:26px;border-radius:7px;}
-  .item .nm{flex:1;font-size:14px;font-weight:400;}
-  .item .tag{font-size:10.5px;letter-spacing:.12em;text-transform:uppercase;font-weight:500;color:var(--muted);}
-  .item.worn{opacity:.42;}
-  .item.worn .tag{color:var(--clay);}
-  .reset{
-    margin:26px 0 0;width:100%;border:1px solid var(--line);background:var(--surface);
-    color:var(--ink-soft);font-family:inherit;font-size:13.5px;font-weight:500;
-    padding:13px;border-radius:12px;cursor:pointer;
-  }
-
-  /* tab bar */
-  nav{
-    position:fixed;left:0;right:0;bottom:0;background:rgba(237,232,223,.92);
-    backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);border-top:1px solid var(--line);
-    padding:8px 0 calc(8px + env(safe-area-inset-bottom));
-  }
-  .nav-in{max-width:480px;margin:0 auto;display:flex;}
-  nav button{
-    flex:1;background:transparent;border:0;font-family:inherit;cursor:pointer;
-    padding:8px;color:var(--muted);font-size:11px;font-weight:500;letter-spacing:.06em;
-    display:flex;flex-direction:column;align-items:center;gap:4px;
-  }
-  nav button.on{color:var(--ink);}
-  nav button svg{width:21px;height:21px;}
-
-  .hidden{display:none;}
-  ::selection{background:rgba(168,131,95,.25);}
-  @media (prefers-reduced-motion: reduce){.card{animation:none;opacity:1;transform:none;}}
+:root{
+  --paper:#EDE8DF;--surface:#F7F3EB;--surface-2:#F0EBE1;
+  --ink:#2B2925;--ink-soft:#5C564C;--muted:#8A8276;--line:#DAD2C4;
+  --accent:#3C4A57;--clay:#A8835F;--ok:#7A8C6E;
+  --shadow:0 1px 2px rgba(43,41,37,.05),0 8px 24px rgba(43,41,37,.06);
+}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent;margin:0;padding:0;}
+html,body{background:var(--paper);color:var(--ink);min-height:100vh;}
+body{font-family:"Zen Kaku Gothic New",system-ui,sans-serif;font-weight:400;line-height:1.5;-webkit-font-smoothing:antialiased;}
+.app{max-width:480px;margin:0 auto;padding:0 20px 110px;}
+header{padding:30px 0 8px;}
+.eyebrow{font-size:11px;letter-spacing:.22em;text-transform:uppercase;color:var(--muted);font-weight:500;display:flex;align-items:center;gap:8px;}
+.dot{width:5px;height:5px;border-radius:50%;background:var(--clay);flex:none;}
+h1{font-weight:300;font-size:34px;letter-spacing:-.01em;margin:10px 0 2px;line-height:1.1;}
+h1 b{font-weight:700;}
+.sub{color:var(--ink-soft);font-size:14px;font-weight:300;}
+.toggle{display:flex;background:var(--surface-2);border:1px solid var(--line);border-radius:999px;padding:4px;margin:22px 0 6px;gap:4px;}
+.toggle button{flex:1;border:0;background:transparent;font-family:inherit;cursor:pointer;padding:10px 8px;border-radius:999px;font-size:13.5px;font-weight:500;color:var(--ink-soft);transition:all .25s ease;}
+.toggle button.on{background:var(--ink);color:var(--paper);box-shadow:var(--shadow);}
+.note{font-size:12.5px;color:var(--muted);margin:10px 2px 0;}
+.hidden{display:none!important;}
+.cards{margin-top:18px;display:flex;flex-direction:column;gap:14px;}
+.card{background:var(--surface);border:1px solid var(--line);border-radius:18px;padding:18px 18px 16px;box-shadow:var(--shadow);opacity:0;transform:translateY(10px);animation:rise .5s cubic-bezier(.2,.7,.2,1) forwards;}
+@keyframes rise{to{opacity:1;transform:none;}}
+.card-top{display:flex;justify-content:space-between;align-items:center;margin-bottom:14px;}
+.opt{font-size:11px;letter-spacing:.2em;text-transform:uppercase;color:var(--muted);font-weight:500;}
+.pill{font-size:11px;font-weight:500;color:var(--accent);background:rgba(60,74,87,.08);border-radius:999px;padding:4px 11px;}
+.rows{display:flex;flex-direction:column;gap:11px;}
+.row{display:flex;align-items:center;gap:13px;}
+.sw{border-radius:9px;flex:none;border:1px solid rgba(43,41,37,.12);}
+.row .kind{font-size:10.5px;letter-spacing:.14em;text-transform:uppercase;color:var(--muted);font-weight:500;}
+.row .name{font-size:15px;color:var(--ink);font-weight:500;line-height:1.25;}
+.why{font-size:12.5px;color:var(--ink-soft);font-weight:300;margin:14px 0 0;}
+.use{margin-top:14px;width:100%;border:1px solid var(--ink);background:transparent;color:var(--ink);font-family:inherit;font-size:14px;font-weight:500;padding:12px;border-radius:11px;cursor:pointer;transition:all .2s ease;}
+.use.done{background:var(--ok);border-color:var(--ok);color:#fff;}
+.reshuffle,.manual-btn{margin:12px 0 0;display:flex;align-items:center;gap:9px;justify-content:center;background:transparent;font-family:inherit;font-size:14px;font-weight:500;cursor:pointer;padding:12px;width:100%;}
+.reshuffle{border:0;color:var(--accent);}
+.reshuffle svg,.manual-btn svg{width:16px;height:16px;flex:none;}
+.manual-btn{border:1px dashed var(--line);color:var(--ink-soft);border-radius:12px;}
+.empty{text-align:center;color:var(--muted);font-size:14px;background:var(--surface);border:1px dashed var(--line);border-radius:16px;padding:34px 24px;margin-top:18px;}
+.empty b{display:block;color:var(--ink);font-weight:500;font-size:15px;margin-bottom:6px;}
+.overlay{position:fixed;inset:0;background:rgba(43,41,37,.45);backdrop-filter:blur(4px);z-index:100;display:flex;align-items:flex-end;}
+.modal{background:var(--paper);border-radius:24px 24px 0 0;padding:28px 22px calc(28px + env(safe-area-inset-bottom));width:100%;max-width:480px;margin:0 auto;max-height:88vh;overflow-y:auto;}
+.modal-title{font-size:18px;font-weight:700;margin-bottom:18px;}
+.sel-group{margin-bottom:16px;}
+.sel-group label{font-size:11px;letter-spacing:.18em;text-transform:uppercase;color:var(--muted);font-weight:500;display:block;margin-bottom:8px;}
+.sel-group select{width:100%;padding:12px 14px;border:1px solid var(--line);border-radius:12px;background:var(--surface);color:var(--ink);font-family:inherit;font-size:14px;font-weight:500;appearance:none;-webkit-appearance:none;}
+.modal-actions{display:flex;gap:10px;margin-top:8px;}
+.modal-actions button{flex:1;padding:13px;border-radius:12px;font-family:inherit;font-size:14px;font-weight:500;cursor:pointer;border:0;}
+.btn-cancel{background:var(--surface-2);color:var(--ink-soft);}
+.btn-confirm{background:var(--ink);color:var(--paper);}
+.stat-boxes{display:flex;gap:10px;margin:20px 0 6px;}
+.stat-box{flex:1;background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:13px 15px;}
+.stat-box .n{font-size:24px;font-weight:300;}
+.stat-box .l{font-size:11px;color:var(--muted);}
+.grp{margin-top:22px;}
+.grp h2{font-size:11px;letter-spacing:.2em;text-transform:uppercase;color:var(--muted);font-weight:500;margin:0 0 10px;display:flex;justify-content:space-between;}
+.pitems{display:flex;flex-direction:column;gap:7px;}
+.pitem{display:flex;align-items:center;gap:12px;background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:9px 12px;cursor:pointer;}
+.pitem .nm{flex:1;font-size:14px;}
+.pitem .tag{font-size:10.5px;letter-spacing:.1em;text-transform:uppercase;font-weight:500;color:var(--muted);}
+.pitem.worn{opacity:.42;}
+.pitem.worn .tag{color:var(--clay);}
+.reset-btn{margin:26px 0 0;width:100%;border:1px solid var(--line);background:var(--surface);color:var(--ink-soft);font-family:inherit;font-size:13.5px;font-weight:500;padding:13px;border-radius:12px;cursor:pointer;}
+.stat-tabs{display:flex;gap:8px;overflow-x:auto;padding-bottom:4px;margin-top:18px;}
+.stat-tabs button{flex:none;border:1px solid var(--line);background:var(--surface);color:var(--ink-soft);font-family:inherit;font-size:12px;font-weight:500;padding:7px 15px;border-radius:999px;cursor:pointer;white-space:nowrap;}
+.stat-tabs button.on{background:var(--ink);color:var(--paper);border-color:var(--ink);}
+.sitem{display:flex;align-items:center;gap:12px;background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:10px 13px;margin-bottom:7px;}
+.sitem-inner{flex:1;min-width:0;}
+.sitem-row{display:flex;justify-content:space-between;align-items:center;margin-bottom:5px;}
+.sitem-name{font-size:14px;}
+.sitem-count{font-size:13px;font-weight:500;color:var(--accent);}
+.bar-wrap{height:4px;background:var(--line);border-radius:4px;}
+.bar{height:4px;border-radius:4px;background:var(--accent);transition:width .5s ease;}
+.hist-card{background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:14px 16px;margin-bottom:10px;}
+.hist-date{font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--muted);font-weight:500;margin-bottom:8px;}
+.hist-row{display:flex;align-items:center;gap:10px;margin-bottom:5px;}
+.hist-row span{font-size:13.5px;}
+.no-hist{text-align:center;color:var(--muted);font-size:13.5px;padding:32px 0;}
+nav{position:fixed;left:0;right:0;bottom:0;background:rgba(237,232,223,.92);backdrop-filter:blur(12px);border-top:1px solid var(--line);padding:8px 0 calc(8px + env(safe-area-inset-bottom));}
+.nav-in{max-width:480px;margin:0 auto;display:flex;}
+nav button{flex:1;background:transparent;border:0;font-family:inherit;cursor:pointer;padding:8px;color:var(--muted);font-size:11px;font-weight:500;display:flex;flex-direction:column;align-items:center;gap:4px;}
+nav button.on{color:var(--ink);}
+nav button svg{width:21px;height:21px;}
+@media(prefers-reduced-motion:reduce){.card{animation:none;opacity:1;transform:none;}}
 </style>
 </head>
 <body>
@@ -165,7 +103,6 @@
     <div class="sub" id="sub">Tres opciones, sin repetir lo de esta semana.</div>
   </header>
 
-  <!-- HOY -->
   <section id="view-hoy">
     <div class="toggle">
       <button id="m-of" class="on" onclick="setMode('oficina')">Oficina</button>
@@ -177,17 +114,43 @@
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M16 3h5v5"/><path d="M4 20 21 3"/><path d="M21 16v5h-5"/><path d="m15 15 6 6"/><path d="M4 4l5 5"/></svg>
       Ver otras opciones
     </button>
+    <button class="manual-btn" onclick="openManual()">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5v14"/><path d="M5 12h14"/></svg>
+      Armar combo a mano
+    </button>
   </section>
 
-  <!-- PLACARD -->
   <section id="view-placard" class="hidden">
-    <div class="stat">
-      <div class="box"><div class="n" id="stat-avail">0</div><div class="l">disponibles</div></div>
-      <div class="box"><div class="n" id="stat-worn">0</div><div class="l">lavando</div></div>
+    <div class="stat-boxes">
+      <div class="stat-box"><div class="n" id="stat-avail">0</div><div class="l">disponibles</div></div>
+      <div class="stat-box"><div class="n" id="stat-worn">0</div><div class="l">lavando</div></div>
     </div>
     <div id="placard-groups"></div>
-    <button class="reset" onclick="resetWeek()">Reiniciar semana · ya lavé todo</button>
+    <button class="reset-btn" onclick="resetWeek()">Reiniciar semana · ya lavé todo</button>
   </section>
+
+  <section id="view-stats" class="hidden">
+    <div class="stat-tabs">
+      <button id="st-top" class="on" onclick="setStatTab('top')">Tops</button>
+      <button id="st-pant" onclick="setStatTab('pant')">Chinos</button>
+      <button id="st-shoe" onclick="setStatTab('shoe')">Calzado</button>
+      <button id="st-hist" onclick="setStatTab('hist')">Historial</button>
+    </div>
+    <div id="stats-body" style="margin-top:16px;"></div>
+  </section>
+</div>
+
+<div class="overlay hidden" id="modal-overlay" onclick="closeManual(event)">
+  <div class="modal">
+    <div class="modal-title">Armá tu combo</div>
+    <div class="sel-group"><label>Camisa / Remera</label><select id="sel-top"></select></div>
+    <div class="sel-group"><label>Chino</label><select id="sel-pant"></select></div>
+    <div class="sel-group"><label>Calzado</label><select id="sel-shoe"></select></div>
+    <div class="modal-actions">
+      <button class="btn-cancel" onclick="closeManual()">Cancelar</button>
+      <button class="btn-confirm" onclick="confirmManual()">Marcar como usado</button>
+    </div>
+  </div>
 </div>
 
 <nav>
@@ -200,273 +163,241 @@
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18"/><path d="M9 21V9"/></svg>
       PLACARD
     </button>
+    <button id="tab-stats" onclick="setTab('stats')">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg>
+      STATS
+    </button>
   </div>
 </nav>
 
 <script>
-/* ---------- Inventario ---------- */
-// color: hex swatch · f: formalidad 1-5 · tuck: dentro/fuera · pat: patrón opcional
-const SHIRTS = [
-  {id:'c1', name:'Rayas finas celeste/marrón', col:'lightblue', hex:'#cdd9e3', f:4, tuck:'dentro', pat:'stripe'},
-  {id:'c2', name:'Rayas celeste y blanca',     col:'lightblue', hex:'#c6d6e7', f:4, tuck:'dentro', pat:'stripe'},
-  {id:'c3', name:'Lila clara',                 col:'lilac',     hex:'#d6cce2', f:4, tuck:'dentro'},
-  {id:'c4', name:'Celeste lisa',               col:'lightblue', hex:'#bcd0e0', f:4, tuck:'dentro'},
-  {id:'c5', name:'Blanca lisa (1)',            col:'white',     hex:'#f1eee7', f:5, tuck:'dentro'},
-  {id:'c6', name:'Blanca lisa (2)',            col:'white',     hex:'#f1eee7', f:5, tuck:'dentro'},
-  {id:'c8', name:'Rosa claro c/ bolsillo',     col:'pink',      hex:'#e6cdd2', f:3, tuck:'dentro'},
-  {id:'c7', name:'Azul marino',                col:'navy',      hex:'#2b3a55', f:2, tuck:'fuera'},
-  {id:'c9', name:'Lino celeste y blanca',      col:'lightblue', hex:'#c2d2dc', f:2, tuck:'fuera', pat:'linen'},
-  {id:'c10',name:'Lino marrón claro',          col:'tan',       hex:'#b6a489', f:2, tuck:'fuera', pat:'linen'},
-  {id:'c11',name:'Lino celeste',               col:'lightblue', hex:'#aac3d4', f:2, tuck:'fuera', pat:'linen'},
-  {id:'c12',name:'De jean',                    col:'denim',     hex:'#6f8aa6', f:2, tuck:'fuera'},
-  {id:'c13',name:'Rayas marrón y blanca',      col:'tan',       hex:'#c4b4a0', f:2, tuck:'fuera', pat:'stripe'},
-  {id:'c14',name:'Blanca c/ bolsillo',         col:'white',     hex:'#f1eee7', f:2, tuck:'fuera'},
+const SHIRTS=[
+  {id:'c1',name:'Rayas finas cel/marr',hex:'#cdd9e3',col:'lightblue',f:4,tuck:'dentro',pat:'stripe'},
+  {id:'c2',name:'Rayas celeste/blanca',hex:'#c6d6e7',col:'lightblue',f:4,tuck:'dentro',pat:'stripe'},
+  {id:'c3',name:'Lila clara',hex:'#d6cce2',col:'lilac',f:4,tuck:'dentro'},
+  {id:'c4',name:'Celeste lisa',hex:'#bcd0e0',col:'lightblue',f:4,tuck:'dentro'},
+  {id:'c5',name:'Blanca lisa (1)',hex:'#f1eee7',col:'white',f:5,tuck:'dentro'},
+  {id:'c6',name:'Blanca lisa (2)',hex:'#f1eee7',col:'white',f:5,tuck:'dentro'},
+  {id:'c8',name:'Rosa claro c/bolsillo',hex:'#e6cdd2',col:'pink',f:3,tuck:'dentro'},
+  {id:'c7',name:'Azul marino',hex:'#2b3a55',col:'navy',f:2,tuck:'fuera'},
+  {id:'c9',name:'Lino celeste/blanca',hex:'#c2d2dc',col:'lightblue',f:2,tuck:'fuera',pat:'linen'},
+  {id:'c10',name:'Lino marrón claro',hex:'#b6a489',col:'tan',f:2,tuck:'fuera',pat:'linen'},
+  {id:'c11',name:'Lino celeste',hex:'#aac3d4',col:'lightblue',f:2,tuck:'fuera',pat:'linen'},
+  {id:'c12',name:'De jean',hex:'#6f8aa6',col:'denim',f:2,tuck:'fuera'},
+  {id:'c13',name:'Rayas marr/blanca',hex:'#c4b4a0',col:'tan',f:2,tuck:'fuera',pat:'stripe'},
+  {id:'c14',name:'Blanca c/bolsillo',hex:'#f1eee7',col:'white',f:2,tuck:'fuera'},
 ];
-const TEES = [
-  {id:'t1', name:'Remera blanca',       col:'white', hex:'#f1eee7', f:1, tuck:'-'},
-  {id:'t2', name:'Remera gris oscuro',  col:'grey',  hex:'#4a4d52', f:1, tuck:'-'},
-  {id:'t3', name:'Remera vino',         col:'wine',  hex:'#6e2b35', f:1, tuck:'-'},
-  {id:'t4', name:'Remera azul',         col:'blue',  hex:'#3a5a8c', f:1, tuck:'-'},
-  {id:'t5', name:'Remera negra',        col:'black', hex:'#232323', f:1, tuck:'-'},
+const TEES=[
+  {id:'t1',name:'Remera blanca',hex:'#f1eee7',col:'white',f:1,tuck:'-'},
+  {id:'t2',name:'Remera gris oscuro',hex:'#4a4d52',col:'grey',f:1,tuck:'-'},
+  {id:'t3',name:'Remera vino',hex:'#6e2b35',col:'wine',f:1,tuck:'-'},
+  {id:'t4',name:'Remera azul',hex:'#3a5a8c',col:'blue',f:1,tuck:'-'},
+  {id:'t5',name:'Remera negra',hex:'#232323',col:'black',f:1,tuck:'-'},
 ];
-const PANTS = [
-  {id:'p1', name:'Chino khaki oscuro',  col:'darkkhaki', hex:'#8a8064', f:4},
-  {id:'p2', name:'Chino verde oliva',   col:'olive',     hex:'#6f7253', f:3},
-  {id:'p3', name:'Chino negro',         col:'black',     hex:'#2a2a2a', f:4},
-  {id:'p4', name:'Chino gris oscuro',   col:'darkgrey',  hex:'#4c4f54', f:4},
-  {id:'p5', name:'Chino azul',          col:'blue',      hex:'#3f5878', f:4},
-  {id:'p6', name:'Chino khaki claro',   col:'lightkhaki',hex:'#b6a585', f:2},
-  {id:'p7', name:'Chino gris (casual)', col:'grey',      hex:'#6a6d72', f:2},
+const PANTS=[
+  {id:'p1',name:'Chino khaki oscuro',hex:'#8a8064',col:'darkkhaki',f:4},
+  {id:'p2',name:'Chino verde oliva',hex:'#6f7253',col:'olive',f:3},
+  {id:'p3',name:'Chino negro',hex:'#2a2a2a',col:'black',f:4},
+  {id:'p4',name:'Chino gris oscuro',hex:'#4c4f54',col:'darkgrey',f:4},
+  {id:'p5',name:'Chino azul',hex:'#3f5878',col:'blue',f:4},
+  {id:'p6',name:'Chino khaki claro',hex:'#b6a585',col:'lightkhaki',f:2},
+  {id:'p7',name:'Chino gris casual',hex:'#6a6d72',col:'grey',f:2},
 ];
-const SHOES = [
-  {id:'s1', name:'Cole Haan marrones',          col:'tan',   hex:'#b69b76', f:3, fam:'brown'},
-  {id:'s2', name:'Cole Haan blancas',           col:'white', hex:'#ecebe4', f:4, fam:'white'},
-  {id:'s3', name:'Adidas gamuza marrón',        col:'brown', hex:'#463a30', f:2, fam:'brown'},
-  {id:'s4', name:'Adidas blancas det. marrón',  col:'white', hex:'#ebe9e2', f:2, fam:'white'},
+const SHOES=[
+  {id:'s1',name:'Cole Haan marrones',hex:'#b69b76',col:'tan',f:3,fam:'brown'},
+  {id:'s2',name:'Cole Haan blancas',hex:'#ecebe4',col:'white',f:4,fam:'white'},
+  {id:'s3',name:'Adidas gamuza marrón',hex:'#463a30',col:'brown',f:2,fam:'brown'},
+  {id:'s4',name:'Adidas blancas det.marr',hex:'#ebe9e2',col:'white',f:2,fam:'white'},
 ];
-const ALL_CLOTHES = [...SHIRTS, ...TEES, ...PANTS]; // lo que se lava (el calzado no)
-const byId = {}; [...SHIRTS,...TEES,...PANTS,...SHOES].forEach(i=>byId[i.id]=i);
+const ALL_W=[...SHIRTS,...TEES,...PANTS];
+const ALL=[...SHIRTS,...TEES,...PANTS,...SHOES];
+const byId={};ALL.forEach(i=>byId[i.id]=i);
 
-/* ---------- Reglas de color ---------- */
-const SHIRT_PANT = {
-  white:    {default:2},
-  lightblue:{blue:1, black:1, default:2},
-  lilac:    {grey:2, darkgrey:2, blue:2, darkkhaki:2, lightkhaki:2, olive:1, black:1, default:1},
-  pink:     {grey:2, darkgrey:2, blue:2, darkkhaki:2, lightkhaki:2, olive:1, black:1, default:1},
-  navy:     {darkkhaki:2, lightkhaki:2, darkgrey:2, grey:2, olive:1, blue:0, black:1, default:1},
-  tan:      {olive:2, blue:2, darkgrey:2, grey:2, darkkhaki:1, lightkhaki:1, black:1, default:1},
-  denim:    {darkkhaki:2, lightkhaki:2, darkgrey:2, grey:2, olive:2, blue:0, black:1, default:1},
-};
-const TEE_PANT = {
-  white:{default:2},
-  grey: {black:1, default:2},
-  wine: {darkkhaki:2, grey:2, darkgrey:2, olive:2, blue:1, black:1, default:1},
-  blue: {darkkhaki:2, grey:2, darkgrey:2, olive:1, black:1, blue:0, default:1},
-  black:{darkkhaki:2, olive:2, grey:1, darkgrey:1, blue:1, black:0, default:1},
-};
-const PANT_SHOE = {
-  white:{default:2},
-  brown:{blue:2, darkgrey:2, grey:2, olive:2, darkkhaki:1, lightkhaki:1, black:0, default:1},
-};
-function look(tbl, key, sub){ const r=tbl[key]; if(!r) return 1; return (sub in r)?r[sub]:r.default; }
+const DAYS=['domingo','lunes','martes','miércoles','jueves','viernes','sábado'];
+const SP={white:{default:2},lightblue:{blue:1,black:1,default:2},lilac:{grey:2,darkgrey:2,blue:2,darkkhaki:2,lightkhaki:2,olive:1,black:1,default:1},pink:{grey:2,darkgrey:2,blue:2,darkkhaki:2,lightkhaki:2,olive:1,black:1,default:1},navy:{darkkhaki:2,lightkhaki:2,darkgrey:2,grey:2,olive:1,blue:0,black:1,default:1},tan:{olive:2,blue:2,darkgrey:2,grey:2,darkkhaki:1,lightkhaki:1,black:1,default:1},denim:{darkkhaki:2,lightkhaki:2,darkgrey:2,grey:2,olive:2,blue:0,black:1,default:1}};
+const TP={white:{default:2},grey:{black:1,default:2},wine:{darkkhaki:2,grey:2,darkgrey:2,olive:2,blue:1,black:1,default:1},blue:{darkkhaki:2,grey:2,darkgrey:2,olive:1,black:1,blue:0,default:1},black:{darkkhaki:2,olive:2,grey:1,darkgrey:1,blue:1,black:0,default:1}};
+const PS={white:{default:2},brown:{blue:2,darkgrey:2,grey:2,olive:2,darkkhaki:1,lightkhaki:1,black:0,default:1}};
+function lk(t,k,s){const r=t[k];if(!r)return 1;return(s in r)?r[s]:r.default;}
 
-/* ---------- Estado ---------- */
-let mode = 'oficina';
-let tab  = 'hoy';
-let worn = [];          // [{id, date}]
-let currentOutfits = [];
-const mem = {};
-const store = {
-  async get(k){
-    try{ if(window.storage){ const r=await window.storage.get(k); return r? JSON.parse(r.value):null; } }catch(e){}
-    try{ const v=localStorage.getItem(k); return v? JSON.parse(v):null; }catch(e){}
-    return (k in mem)?mem[k]:null;
-  },
-  async set(k,v){
-    try{ if(window.storage){ await window.storage.set(k, JSON.stringify(v)); return; } }catch(e){}
-    try{ localStorage.setItem(k, JSON.stringify(v)); return; }catch(e){}
-    mem[k]=v;
-  },
-};
+let mode='oficina',tab='hoy',statTab='top',worn=[],history=[],curOutfits=[];
 
-function lastMonday(){
-  const d=new Date(); d.setHours(0,0,0,0);
-  const back=(d.getDay()+6)%7; d.setDate(d.getDate()-back); return d;
-}
-function activeWorn(){ const m=lastMonday().getTime(); return worn.filter(w=>new Date(w.date).getTime()>=m); }
-function wornSet(){ return new Set(activeWorn().map(w=>w.id)); }
-function isWorn(id){ return wornSet().has(id); }
+function ls(k,v){if(v===undefined){try{const r=localStorage.getItem(k);return r?JSON.parse(r):null;}catch(e){return null;}}try{localStorage.setItem(k,JSON.stringify(v));}catch(e){}}
 
-/* ---------- Generador ---------- */
+function lastMonday(){const d=new Date();d.setHours(0,0,0,0);d.setDate(d.getDate()-(d.getDay()+6)%7);return d;}
+function activeWorn(){const m=lastMonday().getTime();return worn.filter(w=>new Date(w.date).getTime()>=m);}
+function wornSet(){return new Set(activeWorn().map(w=>w.id));}
+function isWorn(id){return wornSet().has(id);}
+
 function pools(){
   const ws=wornSet();
-  let tops, pants, shoes;
-  if(mode==='oficina'){
-    tops  = SHIRTS.filter(s=>s.f>=3 && !ws.has(s.id));
-    pants = PANTS.filter(p=>p.f>=3 && !ws.has(p.id));
-    shoes = SHOES.filter(s=>s.f>=3);              // Cole Haan
-  }else{
-    const infShirts = SHIRTS.filter(s=>s.f<=3);   // lino, jean, navy, rosa, blanca casual
-    tops  = [...infShirts, ...TEES].filter(s=>!ws.has(s.id));
-    pants = PANTS.filter(p=>!ws.has(p.id));
-    shoes = SHOES.slice();                          // todas
-  }
-  return {tops, pants, shoes};
+  if(mode==='oficina')return{tops:SHIRTS.filter(s=>s.f>=3&&!ws.has(s.id)),pants:PANTS.filter(p=>p.f>=3&&!ws.has(p.id)),shoes:SHOES.filter(s=>s.f>=3)};
+  return{tops:[...SHIRTS.filter(s=>s.f<=3),...TEES].filter(s=>!ws.has(s.id)),pants:PANTS.filter(p=>!ws.has(p.id)),shoes:SHOES.slice()};
 }
-function scoreCombo(top, pant, shoe){
-  const isTee = top.id[0]==='t';
-  const sp = isTee ? look(TEE_PANT, top.col, pant.col) : look(SHIRT_PANT, top.col, pant.col);
-  const ps = look(PANT_SHOE, shoe.fam, pant.col);
-  let s = sp*2 + ps*1.5;
-  if(mode==='oficina'){ if(top.f>=4) s+=.3; if(shoe.id==='s2') s+=.15; }
-  else { if(shoe.f<=2) s+=.5; if(isTee) s+=.25; }
-  return {s, sp, ps, isTee};
+function score(top,pant,shoe){
+  const isTee=top.id[0]==='t';
+  const sp=isTee?lk(TP,top.col,pant.col):lk(SP,top.col,pant.col);
+  const ps=lk(PS,shoe.fam,pant.col);
+  let s=sp*2+ps*1.5;
+  if(mode==='oficina'){if(top.f>=4)s+=.3;if(shoe.id==='s2')s+=.15;}
+  else{if(shoe.f<=2)s+=.5;if(isTee)s+=.25;}
+  return{s,sp,ps,isTee};
 }
 function buildOutfits(){
-  const {tops, pants, shoes}=pools();
-  const combos=[];
+  const{tops,pants,shoes}=pools();const combos=[];
   tops.forEach(t=>pants.forEach(p=>shoes.forEach(sh=>{
-    const sc=scoreCombo(t,p,sh);
-    if(sc.sp===0||sc.ps===0) return;           // descartar choques
-    combos.push({top:t, pant:p, shoe:sh, ...sc, r:sc.s+Math.random()*0.7});
+    const sc=score(t,p,sh);if(sc.sp===0||sc.ps===0)return;
+    combos.push({top:t,pant:p,shoe:sh,...sc,r:sc.s+Math.random()*.7});
   })));
   combos.sort((a,b)=>b.r-a.r);
-  const out=[], usedTop=new Set(), usedPant=new Set();
+  const out=[],uT=new Set(),uP=new Set();
   for(const c of combos){
-    if(usedTop.has(c.top.id)) continue;
-    if(usedPant.has(c.pant.id) && out.length<2) continue;
-    out.push(c); usedTop.add(c.top.id); usedPant.add(c.pant.id);
-    if(out.length===3) break;
+    if(uT.has(c.top.id))continue;
+    if(uP.has(c.pant.id)&&out.length<2)continue;
+    out.push(c);uT.add(c.top.id);uP.add(c.pant.id);
+    if(out.length===3)break;
   }
   return out;
 }
 function reason(c){
-  if(c.top.col==='white') return 'La blanca es comodín, va con todo.';
-  if(c.shoe.fam==='white') return 'Zapatillas blancas, limpian cualquier combo.';
-  if(c.sp===2 && c.ps===2) return 'Colores que combinan derecho.';
-  if(c.isTee) return 'Relajado pero prolijo.';
-  if(c.top.col==='tan'||c.top.col==='denim') return 'Tono tierra, queda canchero por fuera.';
+  if(c.top.col==='white')return 'La blanca es comodín, va con todo.';
+  if(c.shoe.fam==='white')return 'Zapatillas blancas, limpian cualquier combo.';
+  if(c.sp===2&&c.ps===2)return 'Colores que combinan derecho.';
+  if(c.isTee)return 'Relajado pero prolijo.';
+  if(c.top.col==='tan'||c.top.col==='denim')return 'Tono tierra, queda canchero por fuera.';
   return 'Combinación segura.';
 }
-function belt(c){
-  if(c.shoe.fam==='brown') return 'marrón';
-  return c.pant.col==='black' ? 'negro' : 'marrón';
-}
+function belt(c){return(c.shoe.fam==='brown'||c.pant.col!=='black')?'marrón':'negro';}
 
-/* ---------- Render: HOY ---------- */
-const dayNames=['domingo','lunes','martes','miércoles','jueves','viernes','sábado'];
-function autoMode(){
-  const d=new Date().getDay();
-  if(d>=1&&d<=3) return 'oficina';
-  return 'relajado';
+function swHTML(it,size){
+  const s=size||34;
+  let bg='';
+  if(it.pat==='stripe')bg=`background:repeating-linear-gradient(90deg,${it.hex} 0 4px,#f4f1ea 4px 7px)`;
+  else if(it.pat==='linen')bg=`background:${it.hex};background-image:linear-gradient(135deg,rgba(255,255,255,.18) 25%,transparent 25%,transparent 50%,rgba(255,255,255,.18) 50%,rgba(255,255,255,.18) 75%,transparent 75%);background-size:6px 6px`;
+  else bg=`background:${it.hex}`;
+  return `<div class="sw" style="width:${s}px;height:${s}px;border-radius:${s<=26?'7':'9'}px;${bg};border:1px solid rgba(43,41,37,.12)"></div>`;
 }
-function swatchStyle(it){
-  if(it.pat==='stripe') return `background:repeating-linear-gradient(90deg, ${it.hex} 0 4px, #f4f1ea 4px 7px);`;
-  if(it.pat==='linen')  return `background:${it.hex};background-image:linear-gradient(135deg, rgba(255,255,255,.18) 25%, transparent 25%, transparent 50%, rgba(255,255,255,.18) 50%, rgba(255,255,255,.18) 75%, transparent 75%);background-size:6px 6px;`;
-  return `background:${it.hex};`;
-}
-function row(kind, it){
-  return `<div class="row"><div class="sw" style="${swatchStyle(it)}"></div>
-    <div class="meta"><div class="kind">${kind}</div><div class="name">${it.name}</div></div></div>`;
-}
+function rowHTML(kind,it){return `<div class="row">${swHTML(it)}<div><div class="kind">${kind}</div><div class="name">${it.name}</div></div></div>`;}
+
 function renderHoy(){
   const d=new Date().getDay();
-  document.getElementById('eyebrow').textContent = `${dayNames[d].toUpperCase()} · ${mode==='oficina'?'OFICINA':'RELAJADO'}`;
+  document.getElementById('eyebrow').textContent=`${DAYS[d].toUpperCase()} · ${mode==='oficina'?'OFICINA':'RELAJADO'}`;
   const dn=document.getElementById('daynote');
-  if(d===5||d===0||d===6){ dn.classList.remove('hidden'); dn.innerHTML='🏠 Finde / home office — igual te tiro opciones si salís.'; }
-  else { dn.classList.add('hidden'); }
-
-  const cards=document.getElementById('cards');
-  document.getElementById('m-of').classList.toggle('on', mode==='oficina');
-  document.getElementById('m-rx').classList.toggle('on', mode==='relajado');
-
-  if(currentOutfits.length===0){
-    cards.innerHTML=`<div class="empty"><b>Ya casi no queda nada limpio</b>Usaste casi todo esta semana. Andá a “Placard” y reiniciá la semana cuando hayas lavado.</div>`;
-    document.getElementById('reshuffleBtn').style.display='none';
-    return;
+  if(d===5||d===0||d===6){dn.classList.remove('hidden');dn.textContent='🏠 Home office / finde — igual te tiro opciones si salís.';}
+  else dn.classList.add('hidden');
+  document.getElementById('m-of').classList.toggle('on',mode==='oficina');
+  document.getElementById('m-rx').classList.toggle('on',mode==='relajado');
+  const el=document.getElementById('cards');
+  if(curOutfits.length===0){
+    el.innerHTML=`<div class="empty"><b>Ya casi no queda nada limpio</b>Usaste casi todo. Reiniciá la semana en Placard cuando hayas lavado.</div>`;
+    document.getElementById('reshuffleBtn').style.display='none';return;
   }
   document.getElementById('reshuffleBtn').style.display='flex';
-  cards.innerHTML = currentOutfits.map((c,i)=>`
-    <div class="card" style="animation-delay:${i*0.07}s">
-      <div class="card-top">
-        <span class="opt">Opción ${i+1}</span>
-        <span class="pill">${c.top.tuck==='dentro'?'Por dentro':(c.top.tuck==='fuera'?'Por fuera':'Remera')}</span>
-      </div>
-      <div class="rows">
-        ${row(c.isTee?'Remera':'Camisa', c.top)}
-        ${row('Chino', c.pant)}
-        ${row('Zapatillas', c.shoe)}
-      </div>
+  el.innerHTML=curOutfits.map((c,i)=>`
+    <div class="card" style="animation-delay:${i*.07}s">
+      <div class="card-top"><span class="opt">Opción ${i+1}</span><span class="pill">${c.isTee?'Remera':c.top.tuck==='dentro'?'Por dentro':'Por fuera'}</span></div>
+      <div class="rows">${rowHTML(c.isTee?'Remera':'Camisa',c.top)}${rowHTML('Chino',c.pant)}${rowHTML('Calzado',c.shoe)}</div>
       <p class="why">${reason(c)} <span style="color:var(--clay)">·</span> Cinturón ${belt(c)}.</p>
       <button class="use" id="use-${i}" onclick="useOutfit(${i})">Usé este hoy</button>
     </div>`).join('');
 }
-function shuffle(){ currentOutfits=buildOutfits(); renderHoy(); }
+function shuffle(){curOutfits=buildOutfits();renderHoy();}
 
-async function useOutfit(i){
-  const c=currentOutfits[i];
+function markWorn(topId,pantId){
   const date=new Date().toISOString();
-  [c.top.id, c.pant.id].forEach(id=>{ worn.push({id, date}); });  // calzado NO se lava
-  await store.set('worn', worn);
+  [topId,pantId].forEach(id=>{if(!isWorn(id))worn.push({id,date});});
+  ls('worn',worn);
+}
+function useOutfit(i){
+  const c=curOutfits[i];
+  markWorn(c.top.id,c.pant.id);
+  history.push({date:new Date().toISOString(),topId:c.top.id,pantId:c.pant.id,shoeId:c.shoe.id,manual:false});
+  ls('history',history);
   const btn=document.getElementById('use-'+i);
-  btn.textContent='✓ Anotado — que rinda'; btn.classList.add('done');
-  setTimeout(()=>{ currentOutfits=buildOutfits(); renderHoy(); if(tab==='placard') renderPlacard(); }, 750);
+  btn.textContent='✓ Anotado — que rinda';btn.classList.add('done');
+  setTimeout(()=>{curOutfits=buildOutfits();renderHoy();},750);
 }
 
-/* ---------- Render: PLACARD ---------- */
-function itemRow(it, washable){
-  const w = washable && isWorn(it.id);
-  return `<div class="item ${w?'worn':''}" onclick="toggleWorn('${it.id}', ${washable})">
-    <div class="sw" style="${swatchStyle(it)}"></div>
-    <div class="nm">${it.name}</div>
-    <div class="tag">${washable ? (w?'Lavando':'Limpia') : 'Siempre'}</div>
-  </div>`;
+function openManual(){
+  const allTops=[...SHIRTS,...TEES];
+  document.getElementById('sel-top').innerHTML=allTops.map(t=>`<option value="${t.id}">${t.name}</option>`).join('');
+  document.getElementById('sel-pant').innerHTML=PANTS.map(p=>`<option value="${p.id}">${p.name}</option>`).join('');
+  document.getElementById('sel-shoe').innerHTML=SHOES.map(s=>`<option value="${s.id}">${s.name}</option>`).join('');
+  document.getElementById('modal-overlay').classList.remove('hidden');
 }
-function group(title, arr, washable, sub){
-  return `<div class="group"><h2>${title}<span>${sub||''}</span></h2><div class="items">${arr.map(i=>itemRow(i,washable)).join('')}</div></div>`;
+function closeManual(e){if(!e||e.target===document.getElementById('modal-overlay'))document.getElementById('modal-overlay').classList.add('hidden');}
+function confirmManual(){
+  const tid=document.getElementById('sel-top').value;
+  const pid=document.getElementById('sel-pant').value;
+  const sid=document.getElementById('sel-shoe').value;
+  markWorn(tid,pid);
+  history.push({date:new Date().toISOString(),topId:tid,pantId:pid,shoeId:sid,manual:true});
+  ls('history',history);
+  document.getElementById('modal-overlay').classList.add('hidden');
+  curOutfits=buildOutfits();renderHoy();
+  const toast=document.createElement('div');
+  toast.style.cssText='position:fixed;bottom:90px;left:50%;transform:translateX(-50%);background:var(--ok);color:#fff;padding:10px 20px;border-radius:10px;font-size:13.5px;font-weight:500;z-index:200;white-space:nowrap;';
+  toast.textContent='✓ Combo registrado';document.body.appendChild(toast);setTimeout(()=>toast.remove(),2000);
 }
+
 function renderPlacard(){
-  const avail = ALL_CLOTHES.length - activeWorn().length;
-  document.getElementById('stat-avail').textContent = avail;
-  document.getElementById('stat-worn').textContent  = activeWorn().length;
-  document.getElementById('placard-groups').innerHTML =
-    group('Camisas', SHIRTS, true) +
-    group('Remeras', TEES, true) +
-    group('Chinos', PANTS, true) +
-    group('Calzado', SHOES, false, 'no se lava');
+  const av=ALL_W.length-activeWorn().length;
+  document.getElementById('stat-avail').textContent=av;
+  document.getElementById('stat-worn').textContent=activeWorn().length;
+  function grp(title,arr,washable,sub){
+    return `<div class="grp"><h2>${title}<span>${sub||''}</span></h2><div class="pitems">${arr.map(it=>{
+      const w=washable&&isWorn(it.id);
+      return `<div class="pitem${w?' worn':''}" onclick="toggleWorn('${it.id}',${washable})">${swHTML(it,26)}<div class="nm">${it.name}</div><div class="tag">${washable?(w?'Lavando':'Limpia'):'Siempre'}</div></div>`;
+    }).join('')}</div></div>`;
+  }
+  document.getElementById('placard-groups').innerHTML=grp('Camisas',SHIRTS,true)+grp('Remeras',TEES,true)+grp('Chinos',PANTS,true)+grp('Calzado',SHOES,false,'no se lava');
 }
-async function toggleWorn(id, washable){
-  if(!washable) return;
-  if(isWorn(id)){ worn = worn.filter(w=>w.id!==id); }
-  else { worn.push({id, date:new Date().toISOString()}); }
-  await store.set('worn', worn);
-  renderPlacard();
+function toggleWorn(id,w){
+  if(!w)return;
+  if(isWorn(id))worn=worn.filter(x=>x.id!==id);else worn.push({id,date:new Date().toISOString()});
+  ls('worn',worn);renderPlacard();
 }
-async function resetWeek(){
-  worn=[]; await store.set('worn', worn);
-  currentOutfits=buildOutfits(); renderPlacard(); renderHoy();
+function resetWeek(){worn=[];ls('worn',worn);curOutfits=buildOutfits();renderPlacard();renderHoy();}
+
+function cntUsage(){const c={};history.forEach(h=>[h.topId,h.pantId,h.shoeId].forEach(id=>{c[id]=(c[id]||0)+1;}));return c;}
+function setStatTab(t){
+  statTab=t;
+  ['top','pant','shoe','hist'].forEach(x=>document.getElementById('st-'+x).classList.toggle('on',x===t));
+  renderStats();
+}
+function renderStats(){
+  const cnt=cntUsage(),body=document.getElementById('stats-body');
+  if(statTab==='hist'){
+    if(!history.length){body.innerHTML=`<div class="no-hist">Todavía no hay historial.<br>Empezá marcando combos.</div>`;return;}
+    body.innerHTML=[...history].sort((a,b)=>new Date(b.date)-new Date(a.date)).map(h=>{
+      const d=new Date(h.date),top=byId[h.topId],pant=byId[h.pantId],shoe=byId[h.shoeId];
+      return `<div class="hist-card"><div class="hist-date">${DAYS[d.getDay()]} ${d.getDate()}/${d.getMonth()+1}${h.manual?' · manual':''}</div>
+        <div class="hist-row">${swHTML(top,20)}<span>${top.name}</span></div>
+        <div class="hist-row">${swHTML(pant,20)}<span>${pant.name}</span></div>
+        <div class="hist-row">${swHTML(shoe,20)}<span>${shoe.name}</span></div></div>`;
+    }).join('');return;
+  }
+  const arr=statTab==='top'?[...SHIRTS,...TEES]:statTab==='pant'?PANTS:SHOES;
+  const max=Math.max(1,...arr.map(it=>cnt[it.id]||0));
+  body.innerHTML=[...arr].sort((a,b)=>(cnt[b.id]||0)-(cnt[a.id]||0)).map(it=>{
+    const n=cnt[it.id]||0,pct=Math.round(n/max*100);
+    const lbl=n===0?`<span style="color:var(--clay);font-size:12px">nunca usado</span>`:`${n} vez${n!==1?'es':''}`;
+    return `<div class="sitem">${swHTML(it,26)}<div class="sitem-inner"><div class="sitem-row"><span class="sitem-name">${it.name}</span><span class="sitem-count">${lbl}</span></div><div class="bar-wrap"><div class="bar" style="width:${pct}%"></div></div></div></div>`;
+  }).join('');
 }
 
-/* ---------- Navegación ---------- */
 function setTab(t){
   tab=t;
-  document.getElementById('view-hoy').classList.toggle('hidden', t!=='hoy');
-  document.getElementById('view-placard').classList.toggle('hidden', t!=='placard');
-  document.getElementById('tab-hoy').classList.toggle('on', t==='hoy');
-  document.getElementById('tab-placard').classList.toggle('on', t==='placard');
-  const h1=document.getElementById('h1'), sub=document.getElementById('sub'), eb=document.getElementById('eyebrow');
-  if(t==='placard'){ h1.innerHTML='Mi <b>placard</b>'; sub.textContent='Tocá una prenda para marcarla como usada o limpia.'; eb.textContent='INVENTARIO'; renderPlacard(); }
-  else { h1.innerHTML='¿Qué me <b>pongo?</b>'; sub.textContent='Tres opciones, sin repetir lo de esta semana.'; renderHoy(); }
+  ['hoy','placard','stats'].forEach(x=>{document.getElementById('view-'+x).classList.toggle('hidden',x!==t);document.getElementById('tab-'+x).classList.toggle('on',x===t);});
+  const T={hoy:['¿Qué me <b>pongo?</b>','Tres opciones, sin repetir lo de esta semana.','HOY'],placard:['Mi <b>placard</b>','Tocá una prenda para marcarla.','INVENTARIO'],stats:['Mis <b>stats</b>','Qué usás, qué olvidás.','HISTORIAL']};
+  const[h,s,e]=T[t];document.getElementById('h1').innerHTML=h;document.getElementById('sub').textContent=s;document.getElementById('eyebrow').textContent=e;
+  if(t==='placard')renderPlacard();
+  if(t==='stats'){statTab='top';['top','pant','shoe','hist'].forEach(x=>document.getElementById('st-'+x).classList.toggle('on',x==='top'));renderStats();}
 }
-function setMode(m){ mode=m; currentOutfits=buildOutfits(); renderHoy(); }
+function setMode(m){mode=m;curOutfits=buildOutfits();renderHoy();}
 
-/* ---------- Init ---------- */
-(async function(){
-  worn = (await store.get('worn')) || [];
-  mode = autoMode();
-  currentOutfits = buildOutfits();
-  renderHoy();
-})();
+worn=ls('worn')||[];history=ls('history')||[];
+mode=(()=>{const d=new Date().getDay();return(d>=1&&d<=3)?'oficina':'relajado';})();
+curOutfits=buildOutfits();renderHoy();
 </script>
 </body>
 </html>
